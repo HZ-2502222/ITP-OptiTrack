@@ -1,89 +1,123 @@
-ITP-OptiTrack
-Welcome to the ITP-OptiTrack project repository. This project is a comprehensive hardware and software integration designed for automated image capture, Optical Character Recognition (OCR), and QR code scanning. It leverages Arduino microcontrollers equipped with camera and Bluetooth modules, pairing them with a Python-based processing backend and a web dashboard for data visualization.
+# ITP-OptiTrack
 
-🚀 Features
-Hardware Image Capture: Utilizes the ArduCAM Mini 5MP (OV5642) for high-quality image capture.
+ITP-OptiTrack is a hardware and software integration project for automated image capture, OCR, and QR code scanning. It combines an Arduino-based capture system with a Python processing backend and a local web dashboard for viewing logs and database entries.
 
-Wireless Communication: Integrates an HC-05 Bluetooth module for wireless data transmission/triggering.
+## Features
 
-Automated Image Processing: Python scripts dedicated to capturing images, defining Regions of Interest (ROI), and processing visual data.
+- Hardware image capture with the ArduCAM Mini 5MP (OV5642)
+- Proximity triggering using an ultrasonic sensor
+- Wireless communication through an HC-05 Bluetooth module
+- Automated image processing through Python scripts for capture, ROI handling, OCR, and QR decoding
+- A web dashboard for viewing system status, logs, and stored records
 
-OCR & QR Decoding: Built-in support for extracting text (OCR) and decoding QR codes from captured images.
+## Repository Structure
 
-Web Dashboard: A local web application (likely Flask-based) to view logs, database entries, and system status in real-time.
-
-📁 Repository Structure
-Plaintext
+```text
 ITP-OptiTrack/
 ├── Arduino/
 │   ├── ArduCAM_Mini_5MP_OV5642_Plus_Functions/
-│   │   └── ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino  # Camera control logic
+│   │   └── ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino
 │   └── HC05_Bluetooth_Module/
-│       └── HC05_Bluetooth_Module.ino                   # Bluetooth communication logic
+│       └── HC05_Bluetooth_Module.ino
 ├── captures/
-│   └── capture.jpg                                     # Temporary/latest image capture storage
 ├── itp_dashboard/
-│   ├── app.py                                          # Web dashboard application entry point
-│   ├── database.json                                   # Local JSON database for dashboard data
-│   ├── guide.txt                                       # Dashboard usage guidelines
+│   ├── app.py
+│   ├── database.json
+│   ├── guide.txt
 │   ├── static/
-│   │   └── style.css                                   # Dashboard styling
+│   │   └── style.css
 │   └── templates/
-│       └── index.html                                  # Dashboard frontend template
+│       └── index.html
 ├── logs/
-│   ├── ocr_log.txt                                     # OCR processing history
-│   └── qr_log.txt                                      # QR code scanning history
+│   ├── ocr_log.txt
+│   └── qr_log.txt
 ├── scanner/
-│   ├── capture.py                                      # Image capture interfacing script
-│   ├── read_ocr.py                                     # OCR processing module
-│   ├── read_qr.py                                      # QR code decoding module
-│   └── roi.py                                          # Region of Interest (ROI) extraction
-├── main.py                                             # Main Python application runner
-└── requirements.txt                                    # Python dependencies
-🛠️ Hardware Requirements
-To fully utilize this repository, you will need the following hardware components:
+│   ├── capture.py
+│   ├── read_ocr.py
+│   ├── read_qr.py
+│   └── roi.py
+├── main.py
+└── requirements.txt
+```
 
-Arduino Board (e.g., Uno, Mega, or Nano)
+## Hardware Requirements
 
-ArduCAM Mini 5MP Plus (OV5642) SPI Camera Module
+- Arduino Uno R3 with USB-C, or a compatible microcontroller
+- ArduCAM Mini 5MP Plus (OV5642) SPI camera module
+- Ultrasonic sensor such as HC-SR04
+- HC-05 Bluetooth module
+- 3 LEDs: green, yellow, and red
+- Appropriate resistors and wiring components
+- Breadboard, jumper wires, and a suitable power supply or USB-C cable
 
-HC-05 Bluetooth Module
+## Software Setup
 
-Connecting wires and appropriate power supply
+### Arduino
 
-💻 Software Setup & Installation
-1. Hardware Setup (Arduino)
-Open the Arduino IDE.
+Before uploading the sketches, make sure your Arduino IDE is configured with the required libraries.
 
-Navigate to the Arduino/ directory in this repository.
+- Install the ArduCAM library, version 4.0.0 or later.
+- Check that the ArduCAM `memorysaver.h` settings match the OV5642 module.
+- Confirm that `Wire`, `SPI`, and `SoftwareSerial` are available.
 
-Flash the ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino and HC05_Bluetooth_Module.ino sketches to your respective Arduino setups. Ensure you have the necessary ArduCAM libraries installed in your Arduino IDE.
+#### ArduCAM and Sensor Sketch
 
-2. Software Setup (Python)
-Ensure you have Python 3.x installed on your system.
+1. Open `Arduino/ArduCAM_Mini_5MP_OV5642_Plus_Functions/ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino`.
+2. Verify the wiring:
+   - Camera CS to digital pin 7.
+   - Ultrasonic sensor Trig to digital pin 3 and Echo to digital pin 2.
+   - Green LED to pin 4, yellow LED to pin 5, and red LED to pin 6.
+3. Select the correct board and COM port in the Arduino IDE.
+4. Upload the sketch.
+5. Open Serial Monitor at 115200 baud to view initialization messages and distance readings.
 
-Clone this repository to your local machine.
+#### HC-05 Bluetooth Sketch
 
-Open a terminal and navigate to the root directory of the project.
+1. Open `Arduino/HC05_Bluetooth_Module/HC05_Bluetooth_Module.ino`.
+2. Verify the wiring:
+   - HC-05 TXD to Arduino pin 9.
+   - HC-05 RXD to Arduino pin 8.
+3. Upload the sketch.
+4. For AT mode, open Serial Monitor at 9600 baud with Both NL & CR selected.
+5. The default AT baud rate is 38400, and the default password is 1234.
 
-Install the required dependencies using pip:
+### Python
 
-Bash
+1. Install Python 3.x.
+2. Clone this repository.
+3. Open a terminal in the project root.
+4. Install the Python dependencies:
+
+```bash
 pip install -r requirements.txt
-(Note: You may also need to install system-level dependencies for OCR, such as Tesseract-OCR, depending on your OS).
+```
 
-⚙️ Usage
-Running the Core System
-To start the main tracking and scanning application, run:
+You may also need OCR system dependencies such as Tesseract-OCR, depending on your operating system.
 
-Bash
+## Usage
+
+### Run the Core System
+
+From the repository root:
+
+```bash
 python main.py
-This will initialize the scanner, listen for incoming captures, process ROIs, and execute the QR/OCR reading modules.
+```
 
-Launching the Dashboard
-To view the captured data and logs via the web interface, navigate to the itp_dashboard directory and start the web app (assuming standard Python web framework execution):
+This starts the scanner pipeline, processes captures, and writes QR and OCR output to the log files.
 
-Bash
+### Run the Dashboard
+
+Start the dashboard from the `itp_dashboard` directory so the relative paths resolve correctly:
+
+```bash
 cd itp_dashboard
 python app.py
-Open your web browser and navigate to http://localhost:5000 (or the port specified in the terminal output) to view the dashboard. All QR and OCR reads are logged in the logs/ directory and visualized here.
+```
+
+Open the local address shown in the terminal, usually `http://localhost:5000`.
+
+## Notes
+
+- QR and OCR reads are stored in `logs/`.
+- The dashboard reads from the log files and updates `database.json`.
