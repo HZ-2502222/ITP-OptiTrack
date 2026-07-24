@@ -1,58 +1,89 @@
-# Optitrack LRT: Maintenance Dashboard 🚈
+ITP-OptiTrack
+Welcome to the ITP-OptiTrack project repository. This project is a comprehensive hardware and software integration designed for automated image capture, Optical Character Recognition (OCR), and QR code scanning. It leverages Arduino microcontrollers equipped with camera and Bluetooth modules, pairing them with a Python-based processing backend and a web dashboard for data visualization.
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-SIT-green)
+🚀 Features
+Hardware Image Capture: Utilizes the ArduCAM Mini 5MP (OV5642) for high-quality image capture.
 
-## 📌 Overview
-The Optitrack LRT Maintenance Dashboard is an administrative web interface designed to monitor the health and performance of a Light Rail Transit network. It provides systems engineers with a centralized platform to track hardware states, log system anomalies, and optimize the deployment of maintenance crews across the transit grid.
+Wireless Communication: Integrates an HC-05 Bluetooth module for wireless data transmission/triggering.
 
-## ✨ Core Features
-* **Real-Time Fault Tracking:** Centralized logging of rolling stock and trackside hardware states to flag system anomalies.
-* **Algorithmic Crew Dispatch:** Leverages local search heuristics and advanced tree configurations within the Python backend to calculate path optimization for maintenance crews, minimizing response times.
-* **Execution Efficiency:** Data structures are structured for rapid traversal, ensuring the dashboard updates efficiently even when processing large volumes of transit data.
-* **Interactive UI:** Clean, responsive frontend built with native HTML and CSS to visualize transit lines and fault locations without heavy client-side frameworks.
+Automated Image Processing: Python scripts dedicated to capturing images, defining Regions of Interest (ROI), and processing visual data.
 
-## 🛠️ Tech Stack
-* **Frontend:** HTML5, CSS3
-* **Backend & API:** Python 
-* **Algorithm Engine:** Python (Handling route optimization heuristics and data structure management)
+OCR & QR Decoding: Built-in support for extracting text (OCR) and decoding QR codes from captured images.
 
-## 🚀 Getting Started
+Web Dashboard: A local web application (likely Flask-based) to view logs, database entries, and system status in real-time.
 
-### Prerequisites
-Before running the dashboard locally, ensure you have the following installed:
-* [Python](https://www.python.org/) (3.8 or higher)
-* [Git](https://git-scm.com/)
+📁 Repository Structure
+Plaintext
+ITP-OptiTrack/
+├── Arduino/
+│   ├── ArduCAM_Mini_5MP_OV5642_Plus_Functions/
+│   │   └── ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino  # Camera control logic
+│   └── HC05_Bluetooth_Module/
+│       └── HC05_Bluetooth_Module.ino                   # Bluetooth communication logic
+├── captures/
+│   └── capture.jpg                                     # Temporary/latest image capture storage
+├── itp_dashboard/
+│   ├── app.py                                          # Web dashboard application entry point
+│   ├── database.json                                   # Local JSON database for dashboard data
+│   ├── guide.txt                                       # Dashboard usage guidelines
+│   ├── static/
+│   │   └── style.css                                   # Dashboard styling
+│   └── templates/
+│       └── index.html                                  # Dashboard frontend template
+├── logs/
+│   ├── ocr_log.txt                                     # OCR processing history
+│   └── qr_log.txt                                      # QR code scanning history
+├── scanner/
+│   ├── capture.py                                      # Image capture interfacing script
+│   ├── read_ocr.py                                     # OCR processing module
+│   ├── read_qr.py                                      # QR code decoding module
+│   └── roi.py                                          # Region of Interest (ROI) extraction
+├── main.py                                             # Main Python application runner
+└── requirements.txt                                    # Python dependencies
+🛠️ Hardware Requirements
+To fully utilize this repository, you will need the following hardware components:
 
-### ⚙️ Installation & Setup
+Arduino Board (e.g., Uno, Mega, or Nano)
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-organization/optitrack-lrt-dashboard.git](https://github.com/your-organization/optitrack-lrt-dashboard.git)
-    cd optitrack-lrt-dashboard
-    ```
+ArduCAM Mini 5MP Plus (OV5642) SPI Camera Module
 
-2.  **Set up a Virtual Environment (Recommended):**
-    ```bash
-    python -m venv venv
-    
-    # On Windows:
-    venv\Scripts\activate
-    
-    # On macOS/Linux:
-    source venv/bin/activate
-    ```
+HC-05 Bluetooth Module
 
-3.  **Install Dependencies:**
-    *(If you are using a framework like Flask or specific Python libraries, install them here)*
-    ```bash
-    pip install -r requirements.txt
-    ```
+Connecting wires and appropriate power supply
 
-### 🖥️ Running the Application
+💻 Software Setup & Installation
+1. Hardware Setup (Arduino)
+Open the Arduino IDE.
 
-To spin up the dashboard locally, execute the main Python script to start the local web server:
+Navigate to the Arduino/ directory in this repository.
 
-```bash
+Flash the ArduCAM_Mini_5MP_OV5642_Plus_Functions.ino and HC05_Bluetooth_Module.ino sketches to your respective Arduino setups. Ensure you have the necessary ArduCAM libraries installed in your Arduino IDE.
+
+2. Software Setup (Python)
+Ensure you have Python 3.x installed on your system.
+
+Clone this repository to your local machine.
+
+Open a terminal and navigate to the root directory of the project.
+
+Install the required dependencies using pip:
+
+Bash
+pip install -r requirements.txt
+(Note: You may also need to install system-level dependencies for OCR, such as Tesseract-OCR, depending on your OS).
+
+⚙️ Usage
+Running the Core System
+To start the main tracking and scanning application, run:
+
+Bash
+python main.py
+This will initialize the scanner, listen for incoming captures, process ROIs, and execute the QR/OCR reading modules.
+
+Launching the Dashboard
+To view the captured data and logs via the web interface, navigate to the itp_dashboard directory and start the web app (assuming standard Python web framework execution):
+
+Bash
+cd itp_dashboard
 python app.py
+Open your web browser and navigate to http://localhost:5000 (or the port specified in the terminal output) to view the dashboard. All QR and OCR reads are logged in the logs/ directory and visualized here.
