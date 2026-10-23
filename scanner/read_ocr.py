@@ -34,17 +34,7 @@ def read_hubodometer_ocr(image_path, output_file="ocr_log.txt"):
         for (bbox, text, prob) in results:
             top_left = tuple(map(int, bbox[0]))
             bottom_right = tuple(map(int, bbox[2]))
-
-            # --- Convert Mileage to Kilometers ---
-            clean_text = text.replace(' ', '')
-            try:
-                miles = float(clean_text)
-                km = round(miles * 1.60934, 2)
-                display_text = str(km)
-            except ValueError:
-                # Fallback in case of an unexpected parsing error
-                display_text = clean_text
-                
+            
             # Draw green bounding boxes and text on the cropped image
             cv2.rectangle(roi, top_left, bottom_right, (0, 255, 0), 2)
             cv2.putText(roi, text, (top_left[0], top_left[1] - 10), 
