@@ -163,7 +163,9 @@ def process_hardware_files(qr_file_path="../logs/qr_log.txt", ocr_file_path="../
 
             # 3. ATTEMPT OCR VALIDATION
             try:
-                mileage_int = int(raw_reading)
+                # --- CONVERT MILES TO KILOMETERS ---
+                raw_miles = int(raw_reading)
+                mileage_int = int(raw_miles * 1.60934)
 
                 # Confidence Parsing and Conversion
                 try:
@@ -259,7 +261,9 @@ def update_mileage():
         return redirect(url_for('dashboard'))
 
     try:
-        mileage_int = int(raw_reading.strip())
+        # --- CONVERT MANUAL INPUT MILES TO KILOMETERS ---
+        raw_miles = int(raw_reading.strip())
+        mileage_int = int(raw_miles * 1.60934)
         formatted_mileage = f"{mileage_int:,}"
         
         new_status, new_issue = maintenance_logic_engine(mileage_int)
